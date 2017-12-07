@@ -16,6 +16,9 @@ io.on('connection', (socket) => {
         io.emit('RECEIVE_MESSAGE', data);
     })
     socket.on('ONLINE', function(data){
-        io.emit('ONLINE_USER', data);
+        io.sockets.emit('ONLINE_USER', data);
+    })
+    socket.on('OFFLINE', function(data){
+        io.emit('OFFLINE_USER', data);
     })
 });
