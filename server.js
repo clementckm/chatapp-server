@@ -12,9 +12,10 @@ server = app.listen(port, function(){
 io = socket(server);
 
 io.on('connection', (socket) => {
-    console.log(socket.id);
-
     socket.on('SEND_MESSAGE', function(data){
         io.emit('RECEIVE_MESSAGE', data);
+    })
+    socket.on('ONLINE', function(data){
+        io.emit('ONLINE_USER', data);
     })
 });
