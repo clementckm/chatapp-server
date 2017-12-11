@@ -21,4 +21,13 @@ io.on('connection', (socket) => {
     socket.on('OFFLINE', function(data){
         io.emit('OFFLINE_USER', data);
     })
+    socket.on('JOIN', function(room) {
+      console.log('room hash:', room)
+      socket.join(room);
+      console.log('join room')
+    });
+    socket.on('PRIVATE_MESSAGE', function(data) {
+      io.sockets.to(data.room).emit('PRIVATE_MESSAGE', data.msg);
+      console.log(data.room, data.msg)
+    });
 });
