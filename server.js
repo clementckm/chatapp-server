@@ -27,7 +27,8 @@ io.on('connection', (socket) => {
       console.log('join room')
     });
     socket.on('PRIVATE_MESSAGE', function(data) {
-      io.sockets.to(data.room).emit('PRIVATE_MESSAGE', data.msg);
-      console.log(data.room, data.msg)
+      // io.sockets.to(data.roomSender).emit('PRIVATE_MESSAGE', data);
+      io.sockets.to(data.roomReceiver).emit('PRIVATE_MESSAGE', data);
+      console.log(data.room, data.payload)
     });
 });
