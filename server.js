@@ -24,9 +24,21 @@ function removeUser (data) {
      onlineUser = u;
 }
 
+// Public Chat
+var publicChat = [];
+function addPublicMessage (data){
+  publicChat.push(data)
+}
+// Private Chat
+var privateChat = [];
+function addPrivateMessage (data){
+  privateChat.push(data)
+}
+
 io.on('connection', (socket) => {
     socket.on('SEND_MESSAGE', function(data){
-        io.emit('RECEIVE_MESSAGE', data);
+      addPublicMessage(data)
+        io.emit('RECEIVE_MESSAGE', publicChat);
     })
     socket.on('ONLINE', function(data){
         onlineUser.push(data.userAddress);
@@ -45,7 +57,7 @@ io.on('connection', (socket) => {
     });
     socket.on('PRIVATE_MESSAGE', function(data) {
       // io.sockets.to(data.roomSender).emit('PRIVATE_MESSAGE', data);
-      io.sockets.to(data.roomReceiver).emit('PRIVATE_MESSAGE', data);
-      console.log(data.room, data.payload)
+      addPrivateMessage(data)
+      io.sockets.to(data.roomReceiver).emit('PRIVATE_MESSAGE', privateChat);
     });
 });
