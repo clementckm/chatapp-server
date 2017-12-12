@@ -11,6 +11,7 @@ server = app.listen(port, function(){
 
 io = socket(server);
 
+// User
 var onlineUser = [];
 function removeUser (data) {
     var len
@@ -22,8 +23,6 @@ function removeUser (data) {
      }
      onlineUser = u;
 }
-
-
 
 io.on('connection', (socket) => {
     socket.on('SEND_MESSAGE', function(data){
