@@ -11,15 +11,33 @@ server = app.listen(port, function(){
 
 io = socket(server);
 
+var onlineUser = [];
+function removeUser (data) {
+    var len
+    var u = onlineUser.slice()
+    for(var i = 0, len = onlineUser.length; i < len; i++ ) {
+         if( u[i] === data ){
+             u.splice(i,1);
+         }
+     }
+     onlineUser = u;
+}
+
+
+
 io.on('connection', (socket) => {
     socket.on('SEND_MESSAGE', function(data){
         io.emit('RECEIVE_MESSAGE', data);
     })
     socket.on('ONLINE', function(data){
-        io.sockets.emit('ONLINE_USER', data);
+        onlineUser.push(data.userAddress);
+        console.log(onlineUser)
+        io.emit('ONLINE_USER', onlineUser);
     })
     socket.on('OFFLINE', function(data){
-        io.emit('OFFLINE_USER', data);
+        removeUser(data);
+        console.log(onlineUser)
+        io.emit('OFFLINE_USER', onlineUser);
     })
     socket.on('JOIN', function(room) {
       console.log('room hash:', room)
