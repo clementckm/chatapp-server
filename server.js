@@ -34,6 +34,12 @@ var privateChat = [];
 function addPrivateMessage (data){
   privateChat.push(data)
 }
+// Friends
+var friends = [];
+function addFriend (data) {
+  friends.push(data)
+}
+
 
 io.on('connection', (socket) => {
     socket.on('SEND_MESSAGE', function(data){
@@ -60,4 +66,10 @@ io.on('connection', (socket) => {
       addPrivateMessage(data)
       io.sockets.to(data.roomReceiver).emit('PRIVATE_MESSAGE', privateChat);
     });
+    socket.on('FRIENDS', function(data){
+        console.log(data)
+        addFriend(data);
+        console.log(friends)
+        io.emit('FRIENDS_LIST', friends);
+    })
 });
