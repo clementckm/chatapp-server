@@ -42,10 +42,12 @@ function addFriend (data) {
 
 
 io.on('connection', (socket) => {
+  // Public Message
     socket.on('SEND_MESSAGE', function(data){
       addPublicMessage(data)
         io.emit('RECEIVE_MESSAGE', publicChat);
     })
+  // User
     socket.on('ONLINE', function(data){
         onlineUser.push(data.userAddress);
         console.log(onlineUser)
@@ -56,6 +58,7 @@ io.on('connection', (socket) => {
         console.log(onlineUser)
         io.emit('OFFLINE_USER', onlineUser);
     })
+  // Private Channel
     socket.on('JOIN', function(room) {
       console.log('room hash:', room)
       socket.join(room);
@@ -66,6 +69,7 @@ io.on('connection', (socket) => {
       addPrivateMessage(data)
       io.sockets.to(data.roomReceiver).emit('PRIVATE_MESSAGE', privateChat);
     });
+  // Friend List
     socket.on('FRIENDS', function(data){
         console.log(data)
         addFriend(data);
